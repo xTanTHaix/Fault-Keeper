@@ -135,6 +135,16 @@ class TimezoneDriftDetector:
             "details": details,
         })
 
+    @classmethod
+    def detect_format_drift(cls, format_str: str) -> Tuple[bool, str]:
+        """Detect week-based YYYY year format traps in format strings."""
+        has_trap = "YYYY" in format_str
+        details = (
+            f"Format '{format_str}' uses week-based year 'YYYY' instead of calendar year 'yyyy'"
+            if has_trap else "No timezone or format drift detected"
+        )
+        return has_trap, details
+
 
 class DSTTrapDetector:
     """Detector for daylight saving time boundary traps and ambiguous periods."""

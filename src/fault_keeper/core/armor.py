@@ -36,6 +36,8 @@ def guard(
     ordered_locks: Optional[Sequence[Any]] = None,
     catch_uaf: bool = True,
     auto_yield_interval_ms: Optional[float] = None,
+    max_drift: Optional[float] = None,
+    **kwargs: Any,
 ) -> Any:
     """One-Line Auto Armor decorator.
     

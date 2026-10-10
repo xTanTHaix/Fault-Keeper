@@ -230,17 +230,20 @@ class ZSC_ThP:
         self.non_critical_allocations: List[str] = []
         self.is_compacting: bool = False
     
-    def allocate(self, size: int, is_critical: bool = False) -> Optional[str]:
+    def allocate(self, size: int = 0, is_critical: bool = False, *, size_bytes: Optional[int] = None) -> Optional[str]:
         """
         Allocate memory of given size.
         
         Args:
             size: Size in bytes or MB
             is_critical: Whether allocation is for critical path
+            size_bytes: Alias for size
             
         Returns:
             Virtual address or None if failed
         """
+        if size_bytes is not None:
+            size = size_bytes
         size_mb = max(1, size // (1024 * 1024)) if size >= 1024 * 1024 else max(1, size // 1024) if size >= 1024 else max(1, size)
         return self.allocate_memory(size_mb, is_critical)
     

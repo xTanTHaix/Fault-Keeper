@@ -16,13 +16,16 @@ class DualNumber:
         dual: The dual part (ẋ, derivative)
     """
 
-    def __init__(self, value: float, dual: float = 0.0):
+    def __init__(self, value: float = 0.0, dual: float = 0.0, *, real: Optional[float] = None):
         """Initialize dual number.
         
         Args:
             value: Real part x
             dual: Dual part ẋ (derivative), default 0.0
+            real: Optional alias for value
         """
+        if real is not None:
+            value = real
         self.value = float(value)
         self.dual = float(dual)
 

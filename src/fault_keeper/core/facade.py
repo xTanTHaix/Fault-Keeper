@@ -212,7 +212,7 @@ class FaultKeeper:
         if self._daily is None:
             from fault_keeper.daily.cdcabs import CrossBoundaryContractSentry
             from fault_keeper.daily.ftdso import FlakyTestDeterministicSieve
-            from fault_keeper.daily.txdlo import TransactionDeadlockOracle
+            from fault_keeper.daily.txdlo import TransactionDeadlockOracle, WaitForGraph
 
             self._daily = type(
                 "DailyModule",
@@ -221,6 +221,7 @@ class FaultKeeper:
                     "FlakyTestDeterministicSieve": FlakyTestDeterministicSieve,
                     "TransactionDeadlockOracle": TransactionDeadlockOracle,
                     "CrossBoundaryContractSentry": CrossBoundaryContractSentry,
+                    "WaitForGraph": WaitForGraph,
                 },
             )()
         return self._daily

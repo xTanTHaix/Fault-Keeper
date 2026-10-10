@@ -770,3 +770,52 @@ class TransactionDeadlockOracle:
             "is_deadlock_free": wfg.is_deadlock_free,
             "is_canonical": ordering.is_canonical,
         }
+
+
+class WaitForGraph:
+    """Convenience Wait-For Graph (WFG) helper for transaction deadlock detection."""
+
+    def __init__(self) -> None:
+        self.dependencies: List[Tuple[str, str]] = []
+
+    def add_dependency(self, tx_a: str, tx_b: str) -> None:
+        """Add directed dependency tx_a -> tx_b (tx_a waiting for tx_b)."""
+        self.dependencies.append((tx_a, tx_b))
+
+    def detect_cycles(self) -> List[List[str]]:
+        """Detect and return list of deadlock cycles."""
+        adj: Dict[str, List[str]] = {}
+        all_nodes: Set[str] = set()
+        for u, v in self.dependencies:
+            adj.setdefault(u, []).append(v)
+            all_nodes.add(u)
+            all_nodes.add(v)
+
+        cycles: List[List[str]] = []
+        visited: Set[str] = set()
+
+        def dfs(curr: str, path: List[str]) -> None:
+            if curr in path:
+                idx = path.index(curr)
+                cycle = path[idx:] + [curr]
+                canon = tuple(cycle[:-1])
+                # Check rotation uniqueness
+                is_dup = False
+                for existing in cycles:
+                    ex_tuple = tuple(existing[:-1])
+                    if len(ex_tuple) == len(canon):
+                        double = ex_tuple + ex_tuple
+                        if any(double[i : i + len(canon)] == canon for i in range(len(ex_tuple))):
+                            is_dup = True
+                            break
+                if not is_dup:
+                    cycles.append(cycle)
+                return
+
+            for nxt in adj.get(curr, []):
+                dfs(nxt, path + [curr])
+
+        for node in all_nodes:
+            dfs(node, [])
+
+        return cycles
