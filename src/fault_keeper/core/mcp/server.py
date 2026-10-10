@@ -34,26 +34,32 @@ class MCPDispatcher:
         """Handle incoming JSON-RPC 2.0 request."""
         method = request.get("method", "")
         params = request.get("params", {})
-        req_id = request.get("id", params.get("id"))
+        req_id = request.get("id", params.get("id") if isinstance(params, dict) else None)
+
+        # JSON-RPC 2.0 / MCP: Explicit notification methods MUST NOT reply
+        if method.startswith("notifications/"):
+            return None
 
         if method == "initialize":
-            return {
+            res = {
                 "jsonrpc": "2.0",
                 "id": req_id,
                 "result": {
                     "protocolVersion": "2024-11-05",
                     "serverInfo": {"name": "fault-keeper", "version": "1.0.0"},
-                    "capabilities": {"tools": {}, "resources": {}},
+                    "capabilities": {"tools": {"listChanged": False}, "resources": {}},
                 },
             }
+        elif method == "ping":
+            res = {"jsonrpc": "2.0", "id": req_id, "result": {}}
         elif method == "tools/list":
             schema = self.facade.get_omni_tools_schema()
-            return {"jsonrpc": "2.0", "id": req_id, "result": {"tools": schema}}
+            res = {"jsonrpc": "2.0", "id": req_id, "result": {"tools": schema}}
         elif method == "tools/call":
             tool_name = params.get("name", "")
             tool_args = params.get("arguments", params)
             tool_res = self.facade.handle_tool_call(tool_name, tool_args)
-            return {
+            res = {
                 "jsonrpc": "2.0",
                 "id": req_id,
                 "result": {
@@ -64,25 +70,27 @@ class MCPDispatcher:
                 },
             }
         elif method in ("resources/list", "resources/read"):
-            return self.facade.handle_request(request)
+            res = self.facade.handle_request(request)
         elif method == "fk_num_eval":
-            return self._eval_num(params, req_id)
+            res = self._eval_num(params, req_id)
         elif method == "sparse_svd_decompose":
-            return self._decompose_svd(params, req_id)
+            res = self._decompose_svd(params, req_id)
         elif method == "geo_orient_query":
-            return self._query_orient(params, req_id)
+            res = self._query_orient(params, req_id)
         elif method == "git_ast_merge":
-            return self._merge_ast(params, req_id)
+            res = self._merge_ast(params, req_id)
         elif method == "audit_copy_paste":
-            return self._audit_copy_paste(params, req_id)
+            res = self._audit_copy_paste(params, req_id)
         elif method == "validate_env_contract":
-            return self._validate_env(params, req_id)
+            res = self._validate_env(params, req_id)
         else:
-            return {
+            res = {
                 "jsonrpc": "2.0",
                 "id": req_id,
                 "error": {"code": -32601, "message": f"Unknown method: {method}"}
             }
+
+        return res
 
     def _eval_num(self, params: Dict[str, Any], req_id: Any) -> Dict[str, Any]:
         """Evaluate numerical expression using DualNumber."""
