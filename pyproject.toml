@@ -25,6 +25,7 @@ classifiers = [
 dependencies = [
     "pytest>=7.0",
     "numpy>=1.24.0",
+    "tzdata>=2023.3; sys_platform == 'win32'",
 ]
 
 [project.optional-dependencies]

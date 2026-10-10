@@ -258,10 +258,13 @@ def normalize_timestamp(
     if target_tz is None:
         target_tz = "UTC"
 
-    try:
-        tz = zoneinfo.ZoneInfo(target_tz)
-    except Exception as e:
-        raise ValueError(f"Unknown timezone: {target_tz}") from e
+    if target_tz.upper() in ("UTC", "ETC/UTC", "Z"):
+        tz: datetime.tzinfo = datetime.timezone.utc
+    else:
+        try:
+            tz = zoneinfo.ZoneInfo(target_tz)
+        except Exception as e:
+            raise ValueError(f"Unknown timezone: {target_tz}") from e
 
     if timestamp.tzinfo is None:
         timestamp = timestamp.replace(tzinfo=datetime.timezone.utc)
