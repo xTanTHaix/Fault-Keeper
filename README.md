@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/fault_keeper_chest.png" alt="Fault-Keeper Chest" width="690" />
+  <img src="./assets/fault_keeper_chest.png" alt="Fault-Keeper Chest" width="598" />
 
   <br/>
 
