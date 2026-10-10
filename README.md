@@ -1,7 +1,7 @@
 <div align="center">
   <img src="./assets/fault_keeper_chest.png" alt="Fault-Keeper Chest" width="460" />
 
-  <br/><br/>
+  <br/>
 
   <p align="center">
     <a href="./README_TH.md"><b>🇹🇭 ภาษาไทย</b></a> &nbsp;•&nbsp;
