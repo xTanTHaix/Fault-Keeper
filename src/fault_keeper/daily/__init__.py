@@ -1,0 +1,113 @@
+"""Daily Developer Traps & Pitfalls Engine Package (FT-DSO, Tx-DLO, CDC-ABS).
+
+Exposes deterministic algorithms for flaky test isolation, transaction deadlock
+prevention via Havender total lock ordering, and static cross-boundary API
+contract verification.
+"""
+
+from __future__ import annotations
+
+from fault_keeper.daily.cdcabs import (
+    BackendEndpointContract,
+    BreakingChangeViolation,
+    ClientCallSite,
+    ClientFieldProjection,
+    ContractVerificationReport,
+    CrossBoundaryContractSentry,
+    SchemaField,
+    analyse_cross_boundary,
+    compute_inhabitation_quotient,
+    harvest_backend_contracts,
+    harvest_client_callsites,
+    is_structural_subtype,
+    normalize_route_path,
+    verify_cross_boundary_contracts,
+)
+from fault_keeper.daily.ftdso import (
+    DeflakingPatch,
+    FTDSOAuditReport,
+    FlakyTestDeterministicSieve,
+    OrderInvarianceReport,
+    PermutationSchedule,
+    StateLeakageReport,
+    StateSnapshot,
+    ToxicPairReport,
+    VirtualClockQuenchReport,
+    VirtualEventClockQuencher,
+    capture_state_snapshot,
+    compute_state_leakage,
+    emit_deflaking_patch,
+    generate_gray_code_sequence,
+    generate_permutation_schedules,
+    gray_code,
+    isolate_minimal_toxic_pair,
+    run_with_leakage_sieve,
+    verify_order_invariance,
+)
+from fault_keeper.daily.txdlo import (
+    BatchKeySortReport,
+    ContentionEntropyReport,
+    LockOrderingReport,
+    LockResource,
+    TransactionDeadlockOracle,
+    TransactionFlow,
+    WaitForGraphReport,
+    benchmark_batch_key_normalizer,
+    build_wait_for_graph,
+    compute_lock_contention_entropy,
+    normalize_batch_keys,
+    slice_ast_transactions,
+    verify_havender_lock_ordering,
+)
+
+__all__ = [
+    # FT-DSO
+    "PermutationSchedule",
+    "OrderInvarianceReport",
+    "ToxicPairReport",
+    "StateSnapshot",
+    "StateLeakageReport",
+    "VirtualClockQuenchReport",
+    "DeflakingPatch",
+    "FTDSOAuditReport",
+    "VirtualEventClockQuencher",
+    "FlakyTestDeterministicSieve",
+    "generate_permutation_schedules",
+    "verify_order_invariance",
+    "gray_code",
+    "generate_gray_code_sequence",
+    "isolate_minimal_toxic_pair",
+    "capture_state_snapshot",
+    "compute_state_leakage",
+    "run_with_leakage_sieve",
+    "emit_deflaking_patch",
+    # Tx-DLO
+    "LockResource",
+    "TransactionFlow",
+    "WaitForGraphReport",
+    "LockOrderingReport",
+    "BatchKeySortReport",
+    "ContentionEntropyReport",
+    "TransactionDeadlockOracle",
+    "slice_ast_transactions",
+    "build_wait_for_graph",
+    "verify_havender_lock_ordering",
+    "normalize_batch_keys",
+    "benchmark_batch_key_normalizer",
+    "compute_lock_contention_entropy",
+    # CDC-ABS
+    "SchemaField",
+    "BackendEndpointContract",
+    "ClientFieldProjection",
+    "ClientCallSite",
+    "BreakingChangeViolation",
+    "ContractVerificationReport",
+    "CrossBoundaryContractSentry",
+    "normalize_route_path",
+    "harvest_backend_contracts",
+    "harvest_client_callsites",
+    "is_structural_subtype",
+    "compute_inhabitation_quotient",
+    "verify_cross_boundary_contracts",
+    "analyse_cross_boundary",
+]

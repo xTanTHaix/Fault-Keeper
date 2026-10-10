@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "fault-keeper": {
+      "command": "L:\\.Python\\Python312\\python.exe",
+      "args": [
+        "L:\\.Tool\\Fault-Keeper\\mcp_server.py"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  }
+}

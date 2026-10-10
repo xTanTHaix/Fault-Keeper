@@ -1,0 +1,6 @@
+# Fault-Keeper Production / Runtime Dependencies
+# Python >= 3.10
+
+numpy>=1.24.0
+scipy>=1.10.0
+z3-solver>=4.12.0
